@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project name="jwplayer-viewer" default="deploy_local" basedir=".">
+
+	<property file="build.properties" />
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+
+	<target name="clean">
+		<echo>Cleaning the ${build.dir}</echo>
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete dir="${project.name}.war" />
+	</target>
+
+	<target name="copy_project" depends="clean">
+		<copy todir="${build.dir}/project">
+			<fileset dir="." excludes="*.war"/>
+		</copy>
+	</target>
+
+	<target name="init" depends="copy_project">
+		<echo>Creating the build directory</echo>
+		<mkdir dir="${build.dir}/WEB-INF/classes" />
+		<mkdir dir="${build.dir}/WEB-INF/lib" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>Compile the source files</echo>
+		<javac srcdir="${src.dir}" destdir="${build.dir}/WEB-INF/classes" debug="true">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="copy" depends="compile">
+		<copy todir="${build.dir}/WEB-INF">
+			<fileset dir="${web.dir}/WEB-INF" />
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset dir="${web.dir}" />
+		</copy>
+		<copy todir="${build.dir}/WEB-INF/lib">
+				<fileset dir="${lib.dir}">
+						<exclude name="servlet-api-2.4.jar" />
+				</fileset>
+		</copy>
+		<copy todir="${build.dir}/src">
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+		</copy>
+		<copy todir="${build.dir}/WEB-INF/classes">
+			<fileset dir="${src.dir}/properties" />
+		</copy>
+	</target>
+
+	<target name="war" depends="copy">
+		<echo>Building the war file</echo>
+		<war destfile="${dist.dir}/${project.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
+			<fileset dir="${build.dir}" />
+		</war>
+		<unzip src="${dist.dir}/${project.name}.war" dest="${project.name}.war"></unzip>
+	</target>
+
+	<target name="deploy_local" depends="war">
+		<echo>Deploying .war to local Tomcat</echo>
+		<copy todir="${tomcat.dir}/${project.name}.war">
+			<fileset dir="${project.name}.war"></fileset>
+		</copy>
+	</target>
+
+</project>

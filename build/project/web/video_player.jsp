@@ -96,10 +96,8 @@ String files = request.getParameter("files");
 		{
 			flashplayer: "flash/player.swf",
 			playlist: lst,
-			"playlist.position": playListPosition,
-			"playlist.size": 385,
-			height: 385,
-			width: 1000,
+			height: "95vh",
+			width: "95vw",
 			volume: defVolume,
 			controlbar: controllbarPosition,
 			autostart: autoStart,

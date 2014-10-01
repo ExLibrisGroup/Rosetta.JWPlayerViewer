@@ -33,7 +33,7 @@ String files = request.getParameter("files");
 		var dps_dvs = '<%=dps_dvs%>';
 		var files = '<%=files%>';
 
-		var playListPosition = "right";
+		var playListPosition = "none";
 		var controllbarPosition = "bottom";
 		var autoPlay = "";
 		var lst = new Array();
@@ -49,6 +49,11 @@ String files = request.getParameter("files");
 			};
 			files = files.substring(files.indexOf(";")+1, files.length);
 			i=i+1;
+		}
+		
+		//playlist bar		
+		if (i > 1) {
+			playListPosition = "right";
 		}
 
 		//set default audio playlist parameters
@@ -96,6 +101,7 @@ String files = request.getParameter("files");
 		{
 			flashplayer: "flash/player.swf",
 			playlist: lst,
+			"playlist.position": playListPosition,
 			height: "95vh",
 			width: "95vw",
 			volume: defVolume,

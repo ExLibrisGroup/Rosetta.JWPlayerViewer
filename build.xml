@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
-<project name="jwplayer-viewer" default="deploy_local" basedir=".">
+<project name="jwplayer-viewer" basedir="." default="build-all">
 
 	<property file="build.properties" />
 
 	<path id="classpath">
 		<fileset dir="${lib.dir}" includes="*.jar" />
 	</path>
+
+	<target name="build-all" depends="init, compile, war" />
 
 	<target name="clean">
 		<echo>Cleaning the ${build.dir}</echo>
@@ -59,14 +61,6 @@
 		<war destfile="${dist.dir}/${project.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
 			<fileset dir="${build.dir}" />
 		</war>
-		<unzip src="${dist.dir}/${project.name}.war" dest="${project.name}.war"></unzip>
-	</target>
-
-	<target name="deploy_local" depends="war">
-		<echo>Deploying .war to local Tomcat</echo>
-		<copy todir="${tomcat.dir}/${project.name}.war">
-			<fileset dir="${project.name}.war"></fileset>
-		</copy>
 	</target>
 
 </project>

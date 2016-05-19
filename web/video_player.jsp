@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <%@ page isELIgnored="false" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <%
@@ -9,24 +11,26 @@ String prov = request.getParameter("provider");
 String delServer = request.getParameter("deliveryServer");
 String files = request.getParameter("files");
 
-%>
-
-<head>
-<title> Video Player Viewer</title>
+%> 
+ 
+<head>  
+<title> Video Player Viewer</title> 
 <script type="text/javascript" src="JWPlayer/jwplayer.js"></script>
-</head>
 
+
+</head>
+ 
 	<!-- START OF THE PLAYER EMBEDDING TO COPY-PASTE -->
 	<div align="center">
 		<div id="mediaplayer">
 			<img src="../images/icons/ico_loading.gif" id="loadingImage" style="margin:1em auto; border:0px; width:32px;"/>
 		</div>
-	</div>
+	</div> 
 	<script type="text/javascript">
-
-		var autoStart = ${bean.autoStart};
+		
+		var autoStart = ${bean.autoStart}; 
 		var prov = '<%=prov%>';
-		var metadata = ${bean.metadata};
+		var metadata = ${bean.metadata}; 
 		var audioView = ${bean.audioView};
 		var defVolume = '${bean.volume}';
 		var defSkin =  '${bean.skin}';
@@ -34,29 +38,24 @@ String files = request.getParameter("files");
 		var dps_dvs = '<%=dps_dvs%>';
 		var files = '<%=files%>';
 
-		var playListPosition = "none";
+		var playListPosition = "right";
 		var controllbarPosition = "bottom";
 		var autoPlay = "";
-		var lst = new Array();
+		var lst = new Array(); 
 		var fileslist = new Array();
-
+ 
 		//creating playlist
-		var i=0;
-		while (files.length>0) {
-			lst[i] = {
-					file: delServer+files.substring(0,files.indexOf(","))+"&dvs="+dps_dvs+"&dps_dvs="+dps_dvs,
-					title: files.substring(files.indexOf(",")+1,files.indexOf(";")),
-					provider: prov
+		var i=0; 
+		while (files.length>0) {			
+			lst[i] = {		
+			file: delServer+files.substring(0,files.indexOf(",")),
+			type: files.substring(files.indexOf(".")+1,files.indexOf(";")),
+			title: files.substring(files.indexOf(",")+1,files.indexOf(";"))
 			};
+
 			files = files.substring(files.indexOf(";")+1, files.length);
 			i=i+1;
 		}
-		
-		//playlist bar		
-		if (i > 1) {
-			playListPosition = "right";
-		}
-
 		//set default audio playlist parameters
 		if(!audioView && prov == "AUDIO") {
 			playListPosition = "bottom";
@@ -73,7 +72,7 @@ String files = request.getParameter("files");
 			pluginLst = {
 				'revolt-1': {},
 				'metaviewer-1': {
-					'position': 'right',
+					'position': 'right',  
 					'size': '200'
 				},
 				'timeslidertooltipplugin-3': {}
@@ -100,17 +99,17 @@ String files = request.getParameter("files");
 		//intitializing video player:
 		jwplayer("mediaplayer").setup(
 		{
-			flashplayer: "flash/player.swf",
 			playlist: lst,
 			"playlist.position": playListPosition,
-			height: "95vh",
-			width: "95vw",
+			"playlist.size": 385,
+			height: 385,
+			width: 1000,
 			volume: defVolume,
 			controlbar: controllbarPosition,
 			autostart: autoStart,
 			repeat: autoPlay,
 			provider: "http",
-			skin: defSkin,
+			skin: "defSkin",
 			plugins: pluginLst
 		});
 
@@ -126,3 +125,4 @@ String files = request.getParameter("files");
 	</script>
 
 </html>
+

@@ -73,10 +73,22 @@ public class VideoPlayerViewer extends HttpServlet {
 			}
 
 			List<Map<String, String>> filesFromStructMapInfo = ieParser.getFilesFromStructMapInfo(mapType.getDiv());
-
+			
+			String fileLable;
 			for (Map<String, String> map : filesFromStructMapInfo) {
-				String key = (String)map.keySet().toArray()[0];
-				videoFiles.add(new VideoFile(key, map.get(key)));
+			String key = (String)map.keySet().toArray()[0];
+			DnxDocument dnxDoc = null;
+			try {
+				dnxDoc = DnxDocumentFactory.getInstance().parse(deliveryAccessWS.getDnxDocument(dpsDvs, key));
+			} catch (Exception_Exception e) {
+				e.printStackTrace();
+			}
+			fileLable =map.get(key);
+			if (dnxDoc != null) {
+				DnxDocumentHelper dnxDocumentHelper = new DnxDocumentHelper(dnxDoc);
+				fileLable = map.get(key) +"."+ dnxDocumentHelper.getGeneralFileCharacteristics().getFileExtension();
+			}
+				videoFiles.add(new VideoFile(key,fileLable));
 			}
 
 		} else { //we are dealing with the file viewer

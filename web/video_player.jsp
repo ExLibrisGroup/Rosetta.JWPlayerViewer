@@ -5,6 +5,7 @@
 
 <%@ page isELIgnored="false" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <%
 String dps_dvs = request.getParameter("dps_dvs");
 String prov = request.getParameter("provider");
@@ -12,23 +13,29 @@ String delServer = request.getParameter("deliveryServer");
 String files = request.getParameter("files");
 
 %> 
- 
-<head>  
-<title> Video Player Viewer</title> 
+<head>
+	<title> Video Player Viewer</title> 
 <script type="text/javascript" src="JWPlayer/jwplayer.js"></script>
+<link rel="stylesheet" type="text/css" href="skins/six.css"> </link>
+<link rel="stylesheet" type="text/css" href="skins/demostyle.css"> </link>
+</head>	
 
+<!-- START OF THE PLAYER EMBEDDING TO COPY-PASTE -->
 
-</head>
- 
-	<!-- START OF THE PLAYER EMBEDDING TO COPY-PASTE -->
 	<div align="center">
 		<div id="mediaplayer">
 			<img src="../images/icons/ico_loading.gif" id="loadingImage" style="margin:1em auto; border:0px; width:32px;"/>
 		</div>
 	</div> 
-	<script type="text/javascript">
-		
-		var autoStart = ${bean.autoStart}; 
+
+
+<div id="fullPlaylist" style="width:680px;">
+
+
+<div class="ListItems" style="position:inherit;">
+<div id="list" style="position:relative;">&nbsp;</div>
+<script type="text/javascript"> 
+var autoStart = ${bean.autoStart}; 
 		var prov = '<%=prov%>';
 		var metadata = ${bean.metadata}; 
 		var audioView = ${bean.audioView};
@@ -52,6 +59,7 @@ String files = request.getParameter("files");
 			type: files.substring(files.indexOf(".")+1,files.indexOf(";")),
 			title: files.substring(files.indexOf(",")+1,files.indexOf(";"))
 			};
+		
 
 			files = files.substring(files.indexOf(";")+1, files.length);
 			i=i+1;
@@ -96,33 +104,43 @@ String files = request.getParameter("files");
 			}
 		}
 
-		//intitializing video player:
-		jwplayer("mediaplayer").setup(
-		{
-			playlist: lst,
-			"playlist.position": playListPosition,
-			"playlist.size": 385,
-			height: 385,
-			width: 1000,
-			volume: defVolume,
-			controlbar: controllbarPosition,
-			autostart: autoStart,
-			repeat: autoPlay,
-			provider: "http",
-			skin: "defSkin",
+
+var playerInstance = jwplayer("mediaplayer");
+playerInstance.setup({
+  playlist: lst,
+  "playlist.position": playListPosition,
+  "playlist.size": 385,
+  height: 385,
+  width: 1000,
+  volume: defVolume,
+  autostart: autoStart,
+  repeat: autoPlay,
+  provider: "http",
+  skin: {
+  name: "six"
+  },	
 			plugins: pluginLst
-		});
+});
+var div = document.getElementsByTagName("div");
+for(var i in div) {
+	if(div[i].className == "contentWrap") {
+		div[i].className = "";
+	}
+};
 
-		//elimanating the grey frame in the background
-		var div = document.getElementsByTagName("div");
-		for(var i in div) {
-			if(div[i].className == "contentWrap") {
-				div[i].className = "";
-			}
-		};
+var list = document.getElementById("list");
+var html = list.innerHTML;
 
+playerInstance.on('ready',function(){
+var playlist = playerInstance.getPlaylist();
+for (var index=0;index<playlist.length;index++){
+var playindex = index +1;
+list.innerHTML = html;
+}
 
-	</script>
-
+});
+function playThis(index) {
+playerInstance.playlistItem(index);
+}
+</script>
 </html>
-

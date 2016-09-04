@@ -1,8 +1,9 @@
 .jw-skin-seven .jw-active-option {
     background-color: hsla(0, 0%, 100%, 0.1);
 }
-.jw-reset {
- line-height: 3em;
+
+.jw-icon-play::before{
+line-height: 3em;
 }
 .jw-skin-six .jw-controlbar{
   max-width: 100%;
